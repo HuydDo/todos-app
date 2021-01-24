@@ -1,5 +1,4 @@
 import React from 'react'
-import ToDoCard from '../components/ToDoCard'
 import CreateCard from '../components/CreateCard'
 import ToDoCardContainer from './ToDoCardContainer'
 
@@ -10,7 +9,7 @@ class MainContainer extends React.Component {
   }
 
   componentDidMount(){
-    fetch("http://localhost:3000/cards")
+    fetch("http://localhost:3001/cards")
     .then(resp => resp.json())
     .then(cards => {
       this.setState({
@@ -20,7 +19,7 @@ class MainContainer extends React.Component {
   }
 
   createNewCard = (input) => {
-    fetch("http://localhost:3000/cards",{
+    fetch("http://localhost:3001/cards",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +38,7 @@ class MainContainer extends React.Component {
   }
 
   addList = (cardId, input) => {
-    fetch("http://localhost:3000/lists", {
+    fetch("http://localhost:3001/lists", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +83,7 @@ class MainContainer extends React.Component {
       newState = true
     }
 
-    fetch(`http://localhost:3000/lists/${listId}`, {
+    fetch(`http://localhost:3001/lists/${listId}`, {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json',
@@ -121,7 +120,7 @@ class MainContainer extends React.Component {
     })
   }
 
-  
+
   render(){
     return (
       <div className="main-container">
