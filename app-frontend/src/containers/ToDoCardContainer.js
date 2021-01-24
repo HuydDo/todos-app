@@ -10,9 +10,9 @@ function ToDoCardContainer(props){
   }
 
   return(
-    <di>  
+    <div>  
       {renderCards()}
-    </di>
+    </div>
   )
 }
 

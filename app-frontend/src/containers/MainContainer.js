@@ -38,6 +38,90 @@ class MainContainer extends React.Component {
     })
   }
 
+  addList = (cardId, input) => {
+    fetch("http://localhost:3000/lists", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        description: input,
+        card_id: cardId,
+        completed: false
+      })
+    })
+    .then(resp => resp.json())
+    .then(newList => {
+      const foundCard = {...this.state.cards.find(card => card.id === cardId)}
+      foundCard.lists = [...foundCard.lists, newList]
+
+      const newCards = this.state.cards.map(card => {
+        if (card.id === cardId){
+          return foundCard
+        } else {
+          return card
+        }
+      })
+
+      this.setState({
+        cards: newCards
+      })
+
+    })
+  }
+
+  handleClickList = (cardId, listId) => {
+
+    const foundCard = {...this.state.cards.find(card => card.id === cardId)}
+    const foundList = foundCard.lists.find(list => list.id === listId)
+
+    let newState = null
+
+    if (foundList.completed) {
+      newState = false
+    } else {
+      newState = true
+    }
+
+    fetch(`http://localhost:3000/lists/${listId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        completed: newState
+      })
+    })
+    .then(resp => resp.json())
+    .then(newList => {
+
+      const newLists = foundCard.lists.map(list => {
+        if (list.id === listId){
+          return newList
+        } else {
+          return list
+        }
+      })
+      foundCard.lists = newLists
+
+
+      const newCards = this.state.cards.map(card => {
+        if (card.id === cardId) {
+          return foundCard
+        } else {
+          return card
+        }
+      })
+
+      this.setState({
+        cards: newCards
+      })
+    })
+  }
+
+  
   render(){
     return (
       <div className="main-container">
