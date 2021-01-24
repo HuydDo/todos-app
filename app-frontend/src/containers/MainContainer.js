@@ -1,7 +1,7 @@
 import React from 'react'
 import ToDoCard from '../components/ToDoCard'
 import CreateCard from '../components/CreateCard'
-import ToDoCardConntainer from './ToDoCardContainer'
+import ToDoCardContainer from './ToDoCardContainer'
 
 class MainContainer extends React.Component {
  
@@ -9,11 +9,21 @@ class MainContainer extends React.Component {
     cards: []
   }
 
+  componentDidMount(){
+    fetch("http://localhost:3000/cards")
+    .then(resp => resp.json())
+    .then(cards => {
+      this.setState({
+        cards: cards
+      })
+    })
+  }
+
   createNewCard = (input) => {
     fetch("http://localhost:3000/cards",{
       method: "POST",
       headers: {
-        'Content-Type' : 'application/json',
+        'Content-Type': 'application/json',
         Accept: 'application/json'
       },
       body: JSON.stringify({
@@ -28,6 +38,14 @@ class MainContainer extends React.Component {
     })
   }
 
+  render(){
+    return (
+      <div className="main-container">
+        <ToDoCardContainer cards={this.state.cards} addList={this.addList} handleClickList={this.handleClickList}/>
+        <CreateCard createNewCard={this.createNewCard} />
+      </div>
+    )
+  }
 }
 
 export default MainContainer;
